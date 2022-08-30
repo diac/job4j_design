@@ -25,16 +25,14 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        T result = container[index];
-        Objects.checkIndex(index, size);
+        T result = get(index);
         container[index] = newValue;
         return result;
     }
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, size);
-        T result = container[index];
+        T result = get(index);
         System.arraycopy(container, index + 1, container, index, size - index - 1);
         modCount++;
         size--;

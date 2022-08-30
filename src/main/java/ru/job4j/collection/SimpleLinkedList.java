@@ -11,12 +11,10 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     private static class Node<E> {
         E item;
         Node<E> next;
-        Node<E> prev;
 
-        Node(Node<E> prev, E element, Node<E> next) {
+        Node(E element, Node<E> next) {
             this.item = element;
             this.next = next;
-            this.prev = prev;
         }
     }
 
@@ -31,7 +29,7 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     @Override
     public void add(E value) {
         final Node<E> l = last;
-        final Node<E> newNode = new Node<>(l, value, null);
+        final Node<E> newNode = new Node<>(value, null);
         last = newNode;
         if (l == null) {
             first = newNode;
@@ -45,20 +43,17 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        Iterator<E> iterator = iterator();
+        var element = first;
         for (var i = 0; i < index; i++) {
-            if (iterator.hasNext()) {
-                iterator.next();
-            }
+            element = element.next;
         }
-        return iterator.next();
+        return element.item;
     }
 
     @Override
     public Iterator<E> iterator() {
 
         return new Iterator<>() {
-            private int index;
 
             private final int expectedModCount = modCount;
 
@@ -77,7 +72,6 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                index++;
                 E result = current.item;
                 current = current.next;
                 return result;

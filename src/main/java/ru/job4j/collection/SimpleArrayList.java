@@ -79,6 +79,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     }
 
     private void increaseCapacity() {
-        container = Arrays.copyOf(container, container.length * 2);
+        container = Arrays.copyOf(container, container.length > 0 ? container.length * 2 : 10);
     }
 }

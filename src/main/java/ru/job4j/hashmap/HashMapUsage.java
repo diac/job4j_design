@@ -20,9 +20,10 @@ public class HashMapUsage {
         map.put(john, new Object());
         map.put(john2, new Object());
         System.out.println(map);
-        System.out.printf("John - хешкод: %s, хэш: %s, бакет: %s\n",
+        System.out.printf("John - хэшкод: %s, хэш: %s, бакет: %s\n",
                 johnHashCode, johnHash, johnBucket);
-        System.out.printf("John2 - хешкод: %s, хэш: %s, бакет: %s\n",
+        System.out.printf("John2 - хэшкод: %s, хэш: %s, бакет: %s\n",
                 john2HashCode, john2Hash, john2Bucket);
+        System.out.println("John equals John2? " + john.equals(john2));
     }
 }

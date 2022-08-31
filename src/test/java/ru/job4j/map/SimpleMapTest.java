@@ -203,8 +203,8 @@ class SimpleMapTest {
         assertThat(map.put(2, "2")).isTrue();
         assertThat(map.put(3, "3")).isTrue();
         assertThat(map.get(1)).isEqualTo("1");
-        assertThat(map.put(null, "NULL VALUE")).isTrue();
-        assertThat(map.get(null)).isEqualTo("NULL VALUE");
+        assertThat(map.put(null, "NULL VALUE")).isFalse();
+        assertThat(map.get(null)).isNull();
     }
 
     @Test

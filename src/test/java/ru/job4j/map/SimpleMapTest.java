@@ -154,4 +154,88 @@ class SimpleMapTest {
         assertThat(map.put(0, "0")).isTrue();
         assertThat(map.get(null)).isNull();
     }
+
+    @Test
+    public void whenPutThenExpand() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.put(4, "4")).isTrue();
+        assertThat(map.put(5, "5")).isTrue();
+        assertThat(map.put(6, "6")).isTrue();
+        assertThat(map.put(15, "15")).isTrue();
+        assertThat(map.put(7, "7")).isTrue();
+        assertThat(map).hasSize(9).contains(7, 15);
+    }
+
+    @Test
+    public void whenPutThenNoDuplicateKeys() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.put(0, "4")).isFalse();
+        assertThat(map.put(0, "5")).isFalse();
+        assertThat(map.put(0, "6")).isFalse();
+        assertThat(map).hasSize(4)
+                .containsExactly(0, 1, 2, 3);
+    }
+
+    @Test
+    public void whenAddNullKeyAndGetThenTrue() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.get(1)).isEqualTo("1");
+        assertThat(map.put(null, "NULL VALUE")).isTrue();
+        assertThat(map.get(null)).isEqualTo("NULL VALUE");
+    }
+
+    @Test
+    public void whenAddNullKeyAndGetThenFalse() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.get(1)).isEqualTo("1");
+        assertThat(map.put(null, "NULL VALUE")).isTrue();
+        assertThat(map.get(null)).isEqualTo("NULL VALUE");
+    }
+
+    @Test
+    public void whenRemoveThenEmpty() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.remove(0)).isTrue();
+        assertThat(map.remove(1)).isTrue();
+        assertThat(map.remove(2)).isTrue();
+        assertThat(map.remove(3)).isTrue();
+        assertThat(map).hasSize(0);
+    }
+
+    @Test
+    public void whenRemoveFromEmptyThenFalse() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertThat(map.put(0, "0")).isTrue();
+        assertThat(map.put(1, "1")).isTrue();
+        assertThat(map.put(2, "2")).isTrue();
+        assertThat(map.put(3, "3")).isTrue();
+        assertThat(map.remove(0)).isTrue();
+        assertThat(map.remove(1)).isTrue();
+        assertThat(map.remove(2)).isTrue();
+        assertThat(map.remove(3)).isTrue();
+        assertThat(map).hasSize(0);
+        assertThat(map.remove(0)).isFalse();
+        assertThat(map.remove(1)).isFalse();
+        assertThat(map.remove(2)).isFalse();
+        assertThat(map.remove(3)).isFalse();
+    }
 }

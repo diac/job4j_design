@@ -60,26 +60,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
         return result;
     }
 
-    /**
-     * Метод возвращает n-ный не равный null индекс из table
-     * @param n Порядковый номер не равного null индекса из table
-     * @return Индекс, если найден по n. -1 -- если индекс не найден
-     */
-    public int nthIndex(int n) {
-        int notNullCount = 0;
-        int result = -1;
-        for (int i = 0; i < table.length; i++) {
-            if (table[i] != null) {
-                notNullCount++;
-            }
-            if (notNullCount - 1 == n) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
     private void rehashNodes() {
         for (int i = 0; i < table.length; i++) {
             if (table[i] != null) {
@@ -109,7 +89,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public Iterator<K> iterator() {
         return new Iterator<>() {
 
-            private int iteratorIndex;
+            private int index;
             private final int expectedModCount = modCount;
 
             @Override
@@ -117,7 +97,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return nthIndex(iteratorIndex) >= 0;
+                while (index < table.length && table[index] == null) {
+                    index++;
+                }
+                return index < table.length;
             }
 
             @Override
@@ -125,7 +108,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return table[nthIndex(iteratorIndex++)].key;
+                return table[index++].key;
             }
 
         };

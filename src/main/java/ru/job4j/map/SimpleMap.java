@@ -19,7 +19,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         boolean result = false;
         modCount++;
         expand();
-        int hashCode = key != null ? key.hashCode() : 0;
+        int hashCode = Objects.hashCode(key);
         int index = indexFor(hash(hashCode));
         if (index < capacity && table[index] == null) {
             table[index] = new MapEntry<>(key, value);
@@ -47,15 +47,14 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        int hashCode = key != null ? key.hashCode() : 0;
-        int index = indexFor(hash(hashCode));
+        int keyHashCode = Objects.hashCode(key);
+        int index = indexFor(hash(keyHashCode));
         V result = null;
-        if (key != null && table[index] != null && table[index].key != null) {
-            if (key.hashCode() == table[index].key.hashCode() || key.equals(table[index].key)) {
-                result = table[index].value;
+        if (table[index] != null) {
+            if (Objects.hashCode(key) == Objects.hashCode(table[index].key)
+                            && Objects.equals(key, table[index].key)) {
+                result = table[index] != null ? table[index].value : null;
             }
-        } else if (key == null && Objects.equals(key, table[index].key)) {
-            result = table[index].value;
         }
         return result;
     }
@@ -76,11 +75,15 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public boolean remove(K key) {
         int hashCode = key != null ? key.hashCode() : 0;
         int index = indexFor(hash(hashCode));
-        boolean result = table[index] != null;
+        boolean result = false;
         modCount++;
-        if (result) {
-            table[index] = null;
-            count--;
+        if (table[index] != null) {
+            if (Objects.hashCode(key) == Objects.hashCode(table[index].key)
+                    && Objects.equals(key, table[index].key)) {
+                table[index] = null;
+                result = true;
+                count--;
+            }
         }
         return result;
     }

@@ -58,9 +58,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
         int index = indexFor(hash(keyHashCode));
         V result = null;
         if (table[index] != null) {
-            if (Objects.hashCode(key) == Objects.hashCode(table[index].key)
+            if (keyHashCode == Objects.hashCode(table[index].key)
                             && Objects.equals(key, table[index].key)) {
-                result = table[index] != null ? table[index].value : null;
+                result = table[index].value;
             }
         }
         return result;
@@ -68,11 +68,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean remove(K key) {
-        int hashCode = key != null ? key.hashCode() : 0;
+        int hashCode = Objects.hashCode(key);
         int index = indexFor(hash(hashCode));
         boolean result = false;
         if (table[index] != null) {
-            if (Objects.hashCode(key) == Objects.hashCode(table[index].key)
+            if (hashCode == Objects.hashCode(table[index].key)
                     && Objects.equals(key, table[index].key)) {
                 table[index] = null;
                 result = true;

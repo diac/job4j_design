@@ -28,8 +28,7 @@ public class SimpleTree<E> implements Tree<E> {
 
     @Override
     public boolean isBinary() {
-        Predicate<Node<E>> nonBinaryCondition = (node) -> node.children.size() > 2;
-        return findByPredicate(nonBinaryCondition).isEmpty();
+        return findByPredicate(node -> node.children.size() > 2).isEmpty();
     }
 
     private Optional<Node<E>> findByPredicate(Predicate<Node<E>> condition) {

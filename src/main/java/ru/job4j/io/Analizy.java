@@ -13,12 +13,11 @@ public class Analizy {
             int entryCount = 0;
             while (in.ready()) {
                 String line = in.readLine();
+                var hasErrorCode = hasErrorCode(line);
                 String logEntryMessage = line.split("\\s", 2)[1];
-                if (hasErrorCode(line)) {
-                    if (entryCount++ == 0) {
-                        result.append(logEntryMessage);
-                    }
-                } else if (entryCount > 0) {
+                if (hasErrorCode && entryCount++ == 0) {
+                    result.append(logEntryMessage);
+                } else if (!hasErrorCode && entryCount > 0) {
                     result.append(";")
                             .append(logEntryMessage)
                             .append("\n");

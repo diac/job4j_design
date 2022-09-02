@@ -1,6 +1,7 @@
 package ru.job4j.io;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 
 public class EvenNumberFile {
 
@@ -17,7 +18,7 @@ public class EvenNumberFile {
                     System.out.println(line);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -42,13 +42,26 @@ class ConfigTest {
     public void whenMissingKeyThenThrowException() {
         String path = "./data/pair_with_missing_key.properties";
         Config config = new Config(path);
-        assertThatThrownBy(config::load).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(config::load)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Invalid property line: =bar");
     }
 
     @Test
     public void whenMissingValueThenThrowException() {
         String path = "./data/pair_with_missing_value.properties";
         Config config = new Config(path);
-        assertThatThrownBy(config::load).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(config::load)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Invalid property line: foo=");
+    }
+
+    @Test
+    public void whenMissingAssignmentSymbolThenThrowException()  {
+        String path = "./data/missing_assignment_symbol.properties";
+        Config config = new Config(path);
+        assertThatThrownBy(config::load)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Invalid property line: key_without_value");
     }
 }

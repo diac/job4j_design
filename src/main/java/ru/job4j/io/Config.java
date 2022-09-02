@@ -29,13 +29,12 @@ public class Config {
     }
 
     private void processLine(String line) {
-        System.out.println(line);
-        boolean skip = line.isBlank() || line.charAt(0) == '#';
-        String[] chunks = line.split("=", 2);
-        if ((chunks.length < 2 || chunks[0].isEmpty() || chunks[1].isEmpty()) && !skip) {
-            throw new IllegalArgumentException();
-        }
+        boolean skip = line.isBlank() || line.startsWith("#");
         if (!skip) {
+            String[] chunks = line.split("=", 2);
+            if ((chunks.length < 2 || chunks[0].isEmpty() || chunks[1].isEmpty())) {
+                throw new IllegalArgumentException("Invalid property line: " + line);
+            }
             values.put(chunks[0], chunks[1]);
         }
     }

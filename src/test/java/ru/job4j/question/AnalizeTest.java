@@ -57,4 +57,24 @@ class AnalizeTest {
         Set current = Set.of(new User(1, "AA"), u2, new User(4, "D"));
         assertThat(Analize.diff(previous, current)).isEqualTo(new Info(1, 1, 1));
     }
+
+    @Test
+    public void whenThreeAddedAndTwoDeleted() {
+        User u1 = new User(1, "A");
+        User u2 = new User(2, "B");
+        User u3 = new User(3, "C");
+        Set previous = Set.of(u1, u2, u3);
+        Set current = Set.of(u2, new User(4, "D"), new User(5, "E"), new User(6, "F"));
+        assertThat(Analize.diff(previous, current)).isEqualTo(new Info(3, 0, 2));
+    }
+
+    @Test
+    public void whenTwoDeleted() {
+        User u1 = new User(1, "A");
+        User u2 = new User(2, "B");
+        User u3 = new User(3, "C");
+        Set previous = Set.of(u1, u2, u3);
+        Set current = Set.of(u2);
+        assertThat(Analize.diff(previous, current)).isEqualTo(new Info(0, 0, 2));
+    }
 }

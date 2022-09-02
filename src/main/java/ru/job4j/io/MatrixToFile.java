@@ -3,6 +3,7 @@ package ru.job4j.io;
 import ru.job4j.array.Matrix;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MatrixToFile {
 
@@ -15,7 +16,7 @@ public class MatrixToFile {
                 }
                 out.write(System.lineSeparator().getBytes());
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

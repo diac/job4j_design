@@ -40,7 +40,7 @@ class ConfigTest {
 
     @Test
     public void whenMissingKeyThenThrowException() {
-        String path = "./data/pair_with_missing_key.properties";
+        String path = "./data/pair_with_missing_key.propertiez";
         Config config = new Config(path);
         assertThatThrownBy(config::load)
                 .isInstanceOf(IllegalArgumentException.class)
@@ -58,7 +58,7 @@ class ConfigTest {
 
     @Test
     public void whenMissingAssignmentSymbolThenThrowException()  {
-        String path = "./data/missing_assignment_symbol.properties";
+        String path = "./data/missing_assignment_symbol.propertiez";
         Config config = new Config(path);
         assertThatThrownBy(config::load)
                 .isInstanceOf(IllegalArgumentException.class)

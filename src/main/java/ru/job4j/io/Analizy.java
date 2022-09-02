@@ -1,7 +1,6 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.util.Iterator;
 
 public class Analizy {
 
@@ -10,21 +9,23 @@ public class Analizy {
                 BufferedReader in = new BufferedReader(new FileReader(source));
                 BufferedWriter out = new BufferedWriter(new FileWriter(target))
         ) {
-            Iterator<String> inIterator = in.lines().iterator();
-            while (inIterator.hasNext()) {
-                String line = inIterator.next();
+            StringBuilder result = new StringBuilder();
+            int entryCount = 0;
+            while (in.ready()) {
+                String line = in.readLine();
+                String logEntryMessage = line.split("\\s", 2)[1];
                 if (hasErrorCode(line)) {
-                    String endLine = "";
-                    while (inIterator.hasNext()) {
-                        endLine = inIterator.next();
-                        if (!hasErrorCode(endLine)) {
-                            break;
-                        }
+                    if (entryCount++ == 0) {
+                        result.append(logEntryMessage);
                     }
-                    out.write(line.split("\\s", 2)[1] + ";" + endLine.split("\\s", 2)[1]);
-                    out.newLine();
+                } else if (entryCount > 0) {
+                    result.append(";")
+                            .append(logEntryMessage)
+                            .append("\n");
+                    entryCount = 0;
                 }
             }
+            out.write(result.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

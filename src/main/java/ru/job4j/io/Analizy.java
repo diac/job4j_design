@@ -9,30 +9,23 @@ public class Analizy {
                 BufferedReader in = new BufferedReader(new FileReader(source));
                 BufferedWriter out = new BufferedWriter(new FileWriter(target))
         ) {
-            StringBuilder result = new StringBuilder();
-            int entryCount = 0;
+            boolean errorSection = false;
             while (in.ready()) {
-                String line = in.readLine();
-                var hasErrorCode = hasErrorCode(line);
-                String logEntryMessage = line.split("\\s", 2)[1];
-                if (hasErrorCode && entryCount++ == 0) {
-                    result.append(logEntryMessage);
-                } else if (!hasErrorCode && entryCount > 0) {
-                    result.append(";")
-                            .append(logEntryMessage)
+                String[] line = in.readLine().split(" ", 2);
+                var hasErrorCode = "400".equals(line[0]) || "500".equals(line[0]);
+                if (hasErrorCode && !errorSection) {
+                    out.append(line[1]);
+                    errorSection = true;
+                } else if (!hasErrorCode && errorSection) {
+                    out.append(";")
+                            .append(line[1])
                             .append("\n");
-                    entryCount = 0;
+                    errorSection = false;
                 }
             }
-            out.write(result.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean hasErrorCode(String line) {
-        String code = line.split("\\s", 2)[0];
-        return "400".equals(code) || "500".equals(code);
     }
 
     public static void main(String[] args) {

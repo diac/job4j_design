@@ -13,12 +13,11 @@ import java.util.Map;
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
 
     private final Map<FileProperty, List<Path>> fileMap = new HashMap<>();
+
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         FileProperty fileProperty = new FileProperty(file.toFile().getName(), file.toFile().length());
-        if (!fileMap.containsKey(fileProperty)) {
-            fileMap.put(fileProperty, new ArrayList<>());
-        }
+        fileMap.putIfAbsent(fileProperty, new ArrayList<>());
         fileMap.get(fileProperty).add(file);
         return super.visitFile(file, attrs);
     }

@@ -12,7 +12,7 @@ public class Search {
     public static void main(String[] args) throws IOException {
         LaunchParams launchParams = validateArguments(args);
         Path start = launchParams.file.toPath();
-        search(start, p -> p.toFile().getName().endsWith("." + launchParams.extension))
+        search(start, p -> p.toFile().getName().endsWith(launchParams.extension))
                 .forEach(System.out::println);
     }
 
@@ -32,10 +32,13 @@ public class Search {
         }
         File file = new File(args[0]);
         if (!file.exists()) {
-            throw new IllegalArgumentException(String.format("Not exist %s", file.getAbsoluteFile()));
+            throw new IllegalArgumentException(String.format("Not exist %s", args[0]));
         }
         if (!file.isDirectory()) {
-            throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsoluteFile()));
+            throw new IllegalArgumentException(String.format("Not directory %s", args[0]));
+        }
+        if (!args[1].contains(".")) {
+            throw new IllegalArgumentException("File extension must start with \".\"");
         }
         return new LaunchParams(file, args[1]);
     }

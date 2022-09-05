@@ -27,11 +27,8 @@ public class Search {
     }
 
     private static LaunchParams validateArguments(String[] args) {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Root folder is null. Usage  ROOT_FOLDER.");
-        }
-        if (args.length < 2) {
-            throw new IllegalArgumentException("File extension is required");
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Root folder is null or file extension is missing. Usage  ROOT_FOLDER FILE_EXTENSION");
         }
         File file = new File(args[0]);
         if (!file.exists()) {

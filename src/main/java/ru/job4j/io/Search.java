@@ -37,7 +37,7 @@ public class Search {
         if (!file.isDirectory()) {
             throw new IllegalArgumentException(String.format("Not directory %s", args[0]));
         }
-        if (!args[1].contains(".")) {
+        if (!args[1].startsWith(".")) {
             throw new IllegalArgumentException("File extension must start with \".\"");
         }
         return new LaunchParams(file, args[1]);

@@ -9,10 +9,12 @@ import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
-    public static void packFiles(List<Path> sources, File target) {
+    public static void packFiles(List<Path> sources, File startDirectory, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
             for (var source : sources) {
-                zip.putNextEntry(new ZipEntry(source.toFile().getPath()));
+                String absolutePath = source.toString();
+                String entryName = absolutePath.substring(startDirectory.getAbsolutePath().length() + 1);
+                zip.putNextEntry(new ZipEntry(entryName));
                 try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toFile()))) {
                     zip.write(out.readAllBytes());
                 }
@@ -51,8 +53,8 @@ public class Zip {
         File directory = new File(namedArgs.get("d"));
         String exclude = namedArgs.get("e");
         File output = new File(namedArgs.get("o"));
-        List<Path> sources = Search.search(directory.toPath(), path -> !path.getFileName().endsWith(exclude));
-        packFiles(sources, output);
+        List<Path> sources = Search.search(directory.toPath(), path -> !path.toFile().getName().endsWith(exclude));
+        packFiles(sources, directory, output);
     }
 
     private static void validateArgs(ArgsName args) {

@@ -71,7 +71,7 @@ public class Zip {
         }
         String extension = args.get("e");
         if (!extension.startsWith(".")) {
-            throw new IllegalArgumentException("The extension parameter must start with \".\"");
+            throw new IllegalArgumentException("The \"EXCLUDE\" parameter must start with \".\"");
         }
         String output = args.get("o");
         if (!output.endsWith(".zip")) {

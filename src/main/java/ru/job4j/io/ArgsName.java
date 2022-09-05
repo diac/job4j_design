@@ -16,9 +16,6 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("At least one argument is required");
-        }
         Arrays.stream(args)
                 .forEach(argument -> {
                     Map.Entry<String, String> validatedArgument = validateArgument(argument);
@@ -27,6 +24,9 @@ public class ArgsName {
     }
 
     public static ArgsName of(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("At least one argument is required");
+        }
         ArgsName names = new ArgsName();
         names.parse(args);
         return names;

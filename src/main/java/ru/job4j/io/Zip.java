@@ -54,12 +54,28 @@ public class Zip {
         String exclude = namedArgs.get("e");
         File output = new File(namedArgs.get("o"));
         List<Path> sources = Search.search(directory.toPath(), path -> !path.toFile().getName().endsWith(exclude));
+        sources.forEach(System.out::println);
         packFiles(sources, directory, output);
     }
 
     private static void validateArgs(ArgsName args) {
         if (!args.getValues().keySet().containsAll(List.of("d", "e", "o"))) {
             throw new IllegalArgumentException("Invalid parameters. Expected parameters: -d=DIRECTORY -e=EXCLUDE -o=OUTPUT");
+        }
+        File directory = new File(args.get("d"));
+        if (!directory.exists()) {
+            throw new IllegalArgumentException(String.format("Directory %s does not exist", directory.getName()));
+        }
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(String.format("%s is not a valid directory", directory.getName()));
+        }
+        String extension = args.get("e");
+        if (!extension.startsWith(".")) {
+            throw new IllegalArgumentException("The extension parameter must start with \".\"");
+        }
+        String output = args.get("o");
+        if (!output.endsWith(".zip")) {
+            throw new IllegalArgumentException("The extension of the output file must be exactly \".zip\"");
         }
     }
 }

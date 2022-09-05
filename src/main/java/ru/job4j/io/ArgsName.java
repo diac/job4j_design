@@ -40,6 +40,10 @@ public class ArgsName {
         System.out.println(zip.get("out"));
     }
 
+    public Map<String, String> getValues() {
+        return values;
+    }
+
     private static Map.Entry<String, String> validateArgument(String argument) {
         if (!argument.startsWith("-")) {
             throw new IllegalArgumentException("Argument key must start with a \"-\" symbol");

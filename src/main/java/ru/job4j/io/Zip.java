@@ -1,16 +1,23 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
-    public static void packFiles(String startingDirectory, String exclude, File target) {
+    public static void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            packSingleFile(new File(startingDirectory), "", exclude, zip);
-        } catch (IOException e) {
+            for (var source : sources) {
+                zip.putNextEntry(new ZipEntry(source.toFile().getPath()));
+                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toFile()))) {
+                    zip.write(out.readAllBytes());
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -36,10 +43,21 @@ public class Zip {
     }
 
     public static void main(String[] args) {
+        if (args.length != 3) {
+            throw new IllegalArgumentException("Exactly 3 parameters are required");
+        }
         ArgsName namedArgs = ArgsName.of(args);
-        String directory = namedArgs.get("d");
+        validateArgs(namedArgs);
+        File directory = new File(namedArgs.get("d"));
         String exclude = namedArgs.get("e");
         File output = new File(namedArgs.get("o"));
-        packFiles(directory, exclude, output);
+        List<Path> sources = Search.search(directory.toPath(), path -> !path.getFileName().endsWith(exclude));
+        packFiles(sources, output);
+    }
+
+    private static void validateArgs(ArgsName args) {
+        if (!args.getValues().keySet().containsAll(List.of("d", "e", "o"))) {
+            throw new IllegalArgumentException("Invalid parameters. Expected parameters: -d=DIRECTORY -e=EXCLUDE -o=OUTPUT");
+        }
     }
 }

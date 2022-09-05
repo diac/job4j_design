@@ -14,9 +14,11 @@ public class Zip {
             for (var source : sources) {
                 String absolutePath = source.toString();
                 String entryName = absolutePath.substring(startDirectory.getAbsolutePath().length() + 1);
-                zip.putNextEntry(new ZipEntry(entryName));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toFile()))) {
-                    zip.write(out.readAllBytes());
+                if (!entryName.equals(target.toString())) {
+                    zip.putNextEntry(new ZipEntry(entryName));
+                    try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toFile()))) {
+                        zip.write(out.readAllBytes());
+                    }
                 }
             }
         } catch (Exception e) {

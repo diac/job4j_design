@@ -85,6 +85,7 @@ public class ConsoleChat {
         while ((phrase = reader.readLine()) != null) {
             phrases.add(phrase);
         }
+        reader.close();
     }
 
     private void saveLog(List<String> log) throws IOException {

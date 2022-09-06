@@ -22,7 +22,7 @@ public class Main {
         contact.setAccounts(List.of(account));
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("isActive", account.isActive());
+        jsonObject.put("active", account.isActive());
         jsonObject.put("rating", account.getRating());
         jsonObject.put("username", account.getUsername());
         jsonObject.put("contact", new JSONObject(account.getContact()));

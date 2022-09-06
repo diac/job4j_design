@@ -14,14 +14,14 @@ public class ConsoleChat {
     private final String path;
     private final String botAnswers;
     private boolean mute = false;
-    private final List<String> phrases = new ArrayList<>();
+    private List<String> phrases = new ArrayList<>();
     private final List<String> chatLog = new ArrayList<>();
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
         this.botAnswers = botAnswers;
         try {
-            loadPhrases();
+            this.phrases = readPhrases();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,24 +69,15 @@ public class ConsoleChat {
         System.out.println(answer);
     }
 
-    private List<String> readPhrases() {
-        try {
-            if (phrases.isEmpty()) {
-                loadPhrases();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return phrases;
-    }
-
-    private void loadPhrases() throws IOException {
+    private List<String> readPhrases() throws IOException {
+        List<String> phrases = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(botAnswers), StandardCharsets.UTF_8));
         String phrase;
         while ((phrase = reader.readLine()) != null) {
             phrases.add(phrase);
         }
         reader.close();
+        return phrases;
     }
 
     private void saveLog(List<String> log) throws IOException {

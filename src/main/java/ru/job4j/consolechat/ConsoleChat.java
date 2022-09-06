@@ -26,7 +26,7 @@ public class ConsoleChat {
     public void run() {
         System.out.println("### Начало чата ###");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
-            while (processInput(reader)) {
+            while (processInput(reader.readLine())) {
                 System.out.println();
             }
             saveLog(chatLog);
@@ -35,10 +35,8 @@ public class ConsoleChat {
         }
     }
 
-    private boolean processInput(BufferedReader reader) throws IOException {
+    private boolean processInput(String input) {
         boolean result = true;
-        String input;
-        input = reader.readLine();
         chatLog.add(input);
         if (List.of(OUT, STOP, CONTINUE).contains(input)) {
             if (input.equals(OUT)) {

@@ -39,9 +39,9 @@ public class ConsoleChat {
         boolean result = true;
         chatLog.add(input);
         if (List.of(OUT, STOP, CONTINUE).contains(input)) {
-            if (input.equals(OUT)) {
+            if (OUT.equals(input)) {
                 result = false;
-            } else if (input.equals(STOP)) {
+            } else if (STOP.equals(input)) {
                 System.out.println("Бот молчит");
                 mute = true;
             } else {

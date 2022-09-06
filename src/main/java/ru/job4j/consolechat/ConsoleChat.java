@@ -1,6 +1,7 @@
 package ru.job4j.consolechat;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +28,7 @@ public class ConsoleChat {
     }
 
     public void run() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
         System.out.println("### Начало чата ###");
         try {
             while (processInput(reader)) {
@@ -80,7 +81,7 @@ public class ConsoleChat {
     }
 
     private void loadPhrases() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(botAnswers)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(botAnswers), StandardCharsets.UTF_8));
         String phrase;
         while ((phrase = reader.readLine()) != null) {
             phrases.add(phrase);
@@ -89,7 +90,7 @@ public class ConsoleChat {
     }
 
     private void saveLog(List<String> log) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path)));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
         for (var logEntry : log) {
             writer.write(logEntry);
             writer.newLine();

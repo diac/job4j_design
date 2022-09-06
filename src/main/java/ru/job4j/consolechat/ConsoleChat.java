@@ -14,27 +14,21 @@ public class ConsoleChat {
     private final String path;
     private final String botAnswers;
     private boolean mute = false;
-    private List<String> phrases = new ArrayList<>();
+    private final List<String> phrases;
     private final List<String> chatLog = new ArrayList<>();
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
         this.botAnswers = botAnswers;
-        try {
-            this.phrases = readPhrases();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.phrases = readPhrases();
     }
 
     public void run() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
         System.out.println("### Начало чата ###");
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
             while (processInput(reader)) {
                 System.out.println();
             }
-            reader.close();
             saveLog(chatLog);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,24 +63,28 @@ public class ConsoleChat {
         System.out.println(answer);
     }
 
-    private List<String> readPhrases() throws IOException {
+    private List<String> readPhrases() {
         List<String> phrases = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(botAnswers), StandardCharsets.UTF_8));
-        String phrase;
-        while ((phrase = reader.readLine()) != null) {
-            phrases.add(phrase);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(botAnswers), StandardCharsets.UTF_8))) {
+            String phrase;
+            while ((phrase = reader.readLine()) != null) {
+                phrases.add(phrase);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
         return phrases;
     }
 
-    private void saveLog(List<String> log) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
-        for (var logEntry : log) {
-            writer.write(logEntry);
-            writer.newLine();
+    private void saveLog(List<String> log) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
+            for (var logEntry : log) {
+                writer.write(logEntry);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        writer.close();
     }
 
     public static void main(String[] args) {

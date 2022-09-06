@@ -18,9 +18,18 @@ public class EchoServer {
                              new InputStreamReader(socket.getInputStream()))) {
                     out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                     for (String str = in.readLine(); str != null && !str.isEmpty(); str = in.readLine()) {
-                        if ("GET /?msg=Bye HTTP/1.1".equals(str)) {
-                            System.out.println("Closing the server...");
-                            server.close();
+                        final String pattern = "(\\w+)\\s(/\\?msg=)(.*)\\s(.*)";
+                        String requestType = str.replaceAll(pattern, "$1");
+                        String msg = str.replaceAll(pattern, "$3");
+                        if ("GET".equals(requestType)) {
+                            if ("Hello".equals(msg)) {
+                                out.write("Hello".getBytes());
+                            } else if ("Exit".equals(msg)) {
+                                System.out.println("Closing the server...");
+                                server.close();
+                            } else if (!msg.isEmpty()) {
+                                out.write("What?".getBytes());
+                            }
                         }
                         System.out.println(str);
                     }

@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CSVReader {
 
-    public static void handle(ArgsName argsName) throws IOException, IllegalArgumentException {
+    public static void handle(ArgsName argsName) {
         LaunchParams launchParams = validateArguments(argsName);
         List<String> filters = Arrays.asList(launchParams.filter.split(","));
         List<List<String>> result = new ArrayList<>();
@@ -28,11 +28,18 @@ public class CSVReader {
                 }
                 result.add(resultRow);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         output(result, launchParams);
     }
 
-    private static void output(List<List<String>> result, LaunchParams launchParams) throws IOException {
+    public static void main(String[] args) {
+        ArgsName argsName = ArgsName.of(args);
+        handle(argsName);
+    }
+
+    private static void output(List<List<String>> result, LaunchParams launchParams) {
         if ("stdout".equals(launchParams.out)) {
             result.forEach(resultRow -> System.out.println(String.join(launchParams.delimiter, resultRow)));
         } else {
@@ -41,6 +48,8 @@ public class CSVReader {
                     out.write(String.join(launchParams.delimiter, resultRow));
                     out.newLine();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -62,6 +71,13 @@ public class CSVReader {
         String delimiter = argsName.get("delimiter");
         if (delimiter.length() != 1) {
             throw new IllegalArgumentException(String.format("Invalid delimiter: %s", delimiter));
+        }
+        try (var scanner = new Scanner(path)) {
+            if (!scanner.hasNextLine()) {
+                throw new IllegalArgumentException("CSV header is required");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return new LaunchParams(path, delimiter, argsName.get("out"), argsName.get("filter"));
     }

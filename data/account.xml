@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<account>
+    <isActive>true</isActive>
+    <rating>95</rating>
+    <username>johnsmith</username>
+    <contact>
+        <zipCode>1234</zipCode>
+        <phone>+1234567</phone>
+    </contact>
+    <privileges>
+        <privilege>admin</privilege>
+        <privilege>manager</privilege>
+    </privileges>
+</account>

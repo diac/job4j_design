@@ -16,7 +16,7 @@ public class Main {
                 true,
                 95,
                 "johnsmith",
-                new Contact(1234, "+1234567"),
+                new Contact(1234, "+1234567", null),
                 new String[]{"admin", "manager"}
         );
         /* Получаем контекст для доступа к АПИ */

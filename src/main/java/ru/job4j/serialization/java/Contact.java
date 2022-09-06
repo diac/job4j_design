@@ -1,5 +1,7 @@
 package ru.job4j.serialization.java;
 
+import org.json.JSONPropertyIgnore;
+
 import javax.xml.bind.annotation.XmlAttribute;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Objects;
 
 @XmlRootElement(name = "contact")
@@ -18,12 +21,15 @@ public class Contact implements Serializable {
     @XmlAttribute
     private String phone;
 
+    private List<Account> accounts;
+
     public Contact() {
     }
 
-    public Contact(int zipCode, String phone) {
+    public Contact(int zipCode, String phone, List<Account> accounts) {
         this.zipCode = zipCode;
         this.phone = phone;
+        this.accounts = accounts;
     }
 
     public int getZipCode() {
@@ -32,6 +38,15 @@ public class Contact implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    @JSONPropertyIgnore
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     @Override
@@ -43,7 +58,7 @@ public class Contact implements Serializable {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        final Contact contact = new Contact(123456, "+7 (111) 111-11-11");
+        final Contact contact = new Contact(123456, "+7 (111) 111-11-11", null);
         System.out.println(contact);
         File tempFile = Files.createTempFile(null, null).toFile();
         try (FileOutputStream fos = new FileOutputStream(tempFile);

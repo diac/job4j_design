@@ -30,6 +30,30 @@ public class Account {
         this.privileges = privileges;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public String[] getPrivileges() {
+        return privileges;
+    }
+
     @Override
     public String toString() {
         return "Account{"

@@ -12,11 +12,7 @@ public class CSVReader {
         result.add(filters);
         try (var scanner = new Scanner(launchParams.path)) {
             List<String> header;
-            if (scanner.hasNextLine()) {
-                header = Arrays.asList(scanner.nextLine().split(launchParams.delimiter));
-            } else {
-                throw new IllegalArgumentException("CSV header is required");
-            }
+            header = Arrays.asList(scanner.nextLine().split(launchParams.delimiter));
             while (scanner.hasNextLine()) {
                 List<String> row = Arrays.asList(scanner.nextLine().split(launchParams.delimiter));
                 List<String> resultRow = new ArrayList<>();

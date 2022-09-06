@@ -1,15 +1,26 @@
 package ru.job4j.serialization.java;
 
+import javax.xml.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+@XmlRootElement(name = "account")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Account {
 
-    private final boolean isActive;
-    private final int rating;
-    private final String username;
-    private final Contact contact;
-    private final String[] privileges;
+    @XmlAttribute
+    private boolean isActive;
+    @XmlAttribute
+    private int rating;
+    @XmlAttribute
+    private String username;
+    private Contact contact;
+    @XmlElementWrapper(name = "privileges")
+    @XmlElement(name = "privilege")
+    private String[] privileges;
+
+    public Account() {
+    }
 
     public Account(boolean isActive, int rating, String username, Contact contact, String[] privileges) {
         this.isActive = isActive;

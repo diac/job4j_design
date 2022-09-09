@@ -16,25 +16,25 @@ public class FileSearch {
         LaunchArgs launchArgs = validateInput(ArgsName.of(args));
         Predicate<Path> condition = path -> true;
         if ("mask".equals(launchArgs.type)) {
-            condition = path ->  {
+            condition = path -> {
                 FileSystem fs = FileSystems.getDefault();
                 PathMatcher matcher = fs.getPathMatcher("glob:" + launchArgs.pattern);
                 return matcher.matches(path.getFileName());
             };
         } else if ("name".equals(launchArgs.type)) {
-            condition = path ->  path.toFile().getName().equals(launchArgs.pattern);
+            condition = path -> path.toFile().getName().equals(launchArgs.pattern);
         } else if ("regex".equals(launchArgs.type)) {
-            condition = path ->  path.toFile().getName().matches(launchArgs.pattern);
+            condition = path -> path.toFile().getName().matches(launchArgs.pattern);
         }
         List<Path> files = Search.search(launchArgs.directory, condition);
-        try {
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(launchArgs.output.toFile().getAbsolutePath())));
+        try (
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(launchArgs.output.toFile().getAbsolutePath())))
+        ) {
             for (var file : files) {
                 out.write(file.toFile().getAbsolutePath());
                 out.newLine();
             }
             out.flush();
-            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
